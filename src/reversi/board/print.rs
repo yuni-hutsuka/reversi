@@ -1,3 +1,5 @@
+use super::Board;
+
 pub static RULED_LINE_UL: char = '┌';
 pub static RULED_LINE_UR: char = '┐';
 pub static RULED_LINE_LL: char = '└';
@@ -5,26 +7,7 @@ pub static RULED_LINE_LR: char = '┘';
 pub static RULED_LINE_V: char = '│';
 pub static RULED_LINE_H: char = '─';
 
-pub struct Board {
-    pub board: [[char; 8]; 8],
-}
-
 impl Board {
-    pub fn new() -> Self {
-        Self {
-            board: [
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'w', 'b', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'b', 'w', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ],
-        }
-    }
-
     pub fn print(&self) {
         for i in 0..17 {
             for j in 0..17 {
