@@ -6,28 +6,26 @@ pub static RULED_LINE_V: char = '│';
 pub static RULED_LINE_H: char = '─';
 
 pub struct Board {
-    pub board: [[i32; 8]; 8],
-    pub side: bool,
+    pub board: [[char; 8]; 8],
 }
 
 impl Board {
     pub fn new() -> Self {
         Self {
             board: [
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 2, 0, 0, 0],
-                [0, 0, 0, 2, 1, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'w', 'b', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'b', 'w', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
             ],
-            side: true,
         }
     }
 
-    pub fn print(self) {
+    pub fn print(&self) {
         for i in 0..17 {
             for j in 0..17 {
                 let tmp: char = match (i, j) {
@@ -85,12 +83,12 @@ impl Board {
                         } else {
                             let tmpi: usize = i / 2;
                             let tmpj: usize = j / 2;
-                            if self.board[tmpi][tmpj] == 0 {
-                                ' '
-                            } else if self.board[tmpi][tmpj] == 2 {
+                            if self.board[tmpi][tmpj] == 'b' {
                                 '●'
-                            } else {
+                            } else if self.board[tmpi][tmpj] == 'w' {
                                 '○'
+                            } else {
+                                ' '
                             }
                         }
                     }
