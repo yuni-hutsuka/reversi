@@ -2,9 +2,11 @@
 
 mod reversi;
 
-use reversi::test;
+use reversi::board::Board;
 
 fn main() {
-    test::test();
-    println!("Hello, world!");
+    let board: Board = Board::new();
+
+    board.print();
+    println!("{:?}", board.search('b'));
 }
