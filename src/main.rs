@@ -1,12 +1,18 @@
 // main
 
+mod attachment;
+mod logic;
 mod reversi;
 
-use reversi::board::Board;
+use std::env;
+use logic::logic;
 
 fn main() {
-    let board: Board = Board::new();
+    let args: Vec<String> = env::args().collect();
 
-    board.print();
-    println!("{:?}", board.search('b'));
+    let input: String = args[1].to_owned();
+
+    let output: String = logic(input);
+
+    println!("{}", output);
 }
