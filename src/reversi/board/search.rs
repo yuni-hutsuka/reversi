@@ -1,14 +1,14 @@
-use super::Board;
+use super::{choice::Choice, point::Point, Board};
 
 impl Board {
-    fn recursive(&self, focus: (usize, usize), side: char, count: usize, direct: &str) -> ((usize, usize), usize) {
-        let mut result: ((usize, usize), usize) = (focus, count);
+    fn recursive(&self, focus: Point, side: char, count: usize, direct: &str) -> (Point, usize) {
+        let mut result: (Point, usize) = (focus.copy(), count);
 
-        let x = focus.0;
-        let y = focus.1;
+        let x = focus.copy().x;
+        let y = focus.copy().y;
 
-        let mut next_x = focus.0;
-        let mut next_y = focus.1;
+        let mut next_x = focus.copy().x;
+        let mut next_y = focus.copy().y;
 
         if direct == "u" && !(y == 0) {
             next_y = next_y - 1;
@@ -33,18 +33,18 @@ impl Board {
         }
 
         if self.board[next_x][next_y] == side {
-            result = ((next_x, next_y), count);
+            result = (Point::new(next_x, next_y), count);
         } else if self.board[next_x][next_y] == 'e' {
-            result = ((next_x, next_y), 0);
+            result = (Point::new(next_x, next_y), 0);
         } else if self.board[next_x][next_y] != side {
-            result = self.recursive((next_x, next_y), side, count + 1, direct);
+            result = self.recursive(Point::new(next_x, next_y), side, count + 1, direct);
         }
 
         return result;
     }
 
-    fn near_check(&self, focus: (usize, usize), side: char) -> Vec<((usize, usize), &str)> {
-        let mut result: Vec<((usize, usize), &str)> = vec![];
+    fn near_check(&self, focus: Point, side: char) -> Vec<(Point, &str)> {
+        let mut result: Vec<(Point, &str)> = vec![];
         let mut indexes: Vec<bool> = vec![];
 
         // 周囲八マスの探索をして探索できるところを決定する
@@ -53,69 +53,61 @@ impl Board {
         // (-1, +1) ( 0, +1) (+1, +1)
 
         // エッジケースへの対応
-        if focus.0 == 7 && focus.1 == 0 {
-            result.push(((focus.0, focus.1 + 1), "d"));
-            result.push(((focus.0 - 1, focus.1 + 1), "dl"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-        }
-        else if focus.0 == 7 && focus.1 == 7 {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-            result.push(((focus.0 - 1, focus.1 - 1), "ul"));
-        } 
-        else if focus.0 == 0 && focus.1 == 7 {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0 + 1, focus.1 - 1), "ur"));
-            result.push(((focus.0 + 1, focus.1), "r"));
-        } 
-        else if focus.0 == 0 && focus.1 == 0 {
-            result.push(((focus.0 + 1, focus.1), "l"));
-            result.push(((focus.0 + 1, focus.1 + 1), "dl"));
-            result.push(((focus.0, focus.1 + 1), "d"));
-        } 
-        else if focus.1 == 0 {
-            result.push(((focus.0 + 1, focus.1), "r"));
-            result.push(((focus.0 + 1, focus.1 + 1), "dr"));
-            result.push(((focus.0, focus.1 + 1), "d"));
-            result.push(((focus.0 - 1, focus.1 + 1), "dl"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-        } 
-        else if focus.0 == 7 {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0, focus.1 + 1), "d"));
-            result.push(((focus.0 - 1, focus.1 + 1), "dl"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-            result.push(((focus.0 - 1, focus.1 - 1), "ul"));
-        } 
-        else if focus.1 == 7 {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0 + 1, focus.1 - 1), "ur"));
-            result.push(((focus.0 + 1, focus.1), "r"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-            result.push(((focus.0 - 1, focus.1 - 1), "ul"));
-        } 
-        else if focus.0 == 0 {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0 + 1, focus.1 - 1), "ur"));
-            result.push(((focus.0 + 1, focus.1), "r"));
-            result.push(((focus.0 + 1, focus.1 + 1), "dr"));
-            result.push(((focus.0, focus.1 + 1), "d"));
-        } 
-        else {
-            result.push(((focus.0, focus.1 - 1), "u"));
-            result.push(((focus.0 + 1, focus.1 - 1), "ur"));
-            result.push(((focus.0 + 1, focus.1), "r"));
-            result.push(((focus.0 + 1, focus.1 + 1), "dr"));
-            result.push(((focus.0, focus.1 + 1), "d"));
-            result.push(((focus.0 - 1, focus.1 + 1), "dl"));
-            result.push(((focus.0 - 1, focus.1), "l"));
-            result.push(((focus.0 - 1, focus.1 - 1), "ul"));
+        if focus.x == 7 && focus.y == 0 {
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+            result.push((Point::new(focus.x - 1, focus.y + 1), "dl"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+        } else if focus.x == 7 && focus.y == 7 {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+            result.push((Point::new(focus.x - 1, focus.y - 1), "ul"));
+        } else if focus.x == 0 && focus.y == 7 {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x + 1, focus.y - 1), "ur"));
+            result.push((Point::new(focus.x + 1, focus.y), "r"));
+        } else if focus.x == 0 && focus.y == 0 {
+            result.push((Point::new(focus.x + 1, focus.y), "l"));
+            result.push((Point::new(focus.x + 1, focus.y + 1), "dl"));
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+        } else if focus.y == 0 {
+            result.push((Point::new(focus.x + 1, focus.y), "r"));
+            result.push((Point::new(focus.x + 1, focus.y + 1), "dr"));
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+            result.push((Point::new(focus.x - 1, focus.y + 1), "dl"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+        } else if focus.x == 7 {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+            result.push((Point::new(focus.x - 1, focus.y + 1), "dl"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+            result.push((Point::new(focus.x - 1, focus.y - 1), "ul"));
+        } else if focus.y == 7 {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x + 1, focus.y - 1), "ur"));
+            result.push((Point::new(focus.x + 1, focus.y), "r"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+            result.push((Point::new(focus.x - 1, focus.y - 1), "ul"));
+        } else if focus.x == 0 {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x + 1, focus.y - 1), "ur"));
+            result.push((Point::new(focus.x + 1, focus.y), "r"));
+            result.push((Point::new(focus.x + 1, focus.y + 1), "dr"));
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+        } else {
+            result.push((Point::new(focus.x, focus.y - 1), "u"));
+            result.push((Point::new(focus.x + 1, focus.y - 1), "ur"));
+            result.push((Point::new(focus.x + 1, focus.y), "r"));
+            result.push((Point::new(focus.x + 1, focus.y + 1), "dr"));
+            result.push((Point::new(focus.x, focus.y + 1), "d"));
+            result.push((Point::new(focus.x - 1, focus.y + 1), "dl"));
+            result.push((Point::new(focus.x - 1, focus.y), "l"));
+            result.push((Point::new(focus.x - 1, focus.y - 1), "ul"));
         }
 
         for i in 0..result.len() {
-            if self.board[result[i].0.0][result[i].0.1] == 'e' {
+            if self.board[result[i].0.x][result[i].0.y] == 'e' {
                 indexes.push(false);
-            } else if self.board[result[i].0.0][result[i].0.1] == side {
+            } else if self.board[result[i].0.x][result[i].0.y] == side {
                 indexes.push(false);
             } else {
                 indexes.push(true);
@@ -128,44 +120,41 @@ impl Board {
         return result;
     }
 
-    fn target(&self, focus: (usize, usize), side: char) -> Vec<((usize, usize), usize)> {
-        let mut result: Vec<((usize, usize), usize)> = vec![];
-        let mut indexes: Vec<bool> = vec![];
+    fn target(&self, focus: Point, side: char) -> (Vec<Point>, usize) {
+        let mut result: (Vec<Point>, usize) = (vec![], 0);
 
-        let directions: Vec<((usize, usize), &str)> = self.near_check(focus, side);
+        let directions: Vec<(Point, &str)> = self.near_check(focus, side);
 
         for i in 0..directions.len() {
-            result.push(self.recursive(directions[i].0, side, 1, directions[i].1));
-        }
+            let focus = directions[i].0.copy();
+            let direct = directions[i].1;
 
-        for i in 0..result.len() {
-            if result[i].1 == 0 {
-                indexes.push(false);
-            } else {
-                indexes.push(true);
+            let tmp: (Point, usize) = self.recursive(focus, side, 1, direct);
+
+            if tmp.1 != 0 {
+                result.0.push(tmp.0);
+                result.1 = result.1 + tmp.1;
             }
         }
-
-        let mut iter = indexes.iter();
-        result.retain(|_| *iter.next().unwrap());
 
         return result;
     }
 
-    pub fn search(&self, side: char) -> Vec<((usize, usize), (usize, usize), usize)> {
-
-        let mut points: Vec<((usize, usize), (usize, usize), usize)> = vec![];
+    pub fn search(&self, side: char) -> Vec<Choice> {
+        let mut points: Vec<Choice> = vec![];
 
         for i in 0..8 {
             for j in 0..8 {
                 if self.board[i][j] == 'e' {
-                    let focus: (usize, usize) = (i, j);
-                    let target: Vec<((usize, usize), usize)> = self.target(focus, side);
+                    let focus: Point = Point::new(i, j);
+                    let target: (Vec<Point>, usize) = self.target(focus, side);
 
-                    if !target.is_empty() {
-                        for i in 0..target.len() {
-                            points.push((focus, (target[i].0), target[i].1))
-                        }
+                    if !target.0.is_empty() {
+                        let focus: Point = Point::new(i, j);
+                        let mut choice: Choice = Choice::new(focus);
+                        choice.targets = target.0;
+                        choice.count = target.1;
+                        points.push(choice)
                     }
                 }
             }

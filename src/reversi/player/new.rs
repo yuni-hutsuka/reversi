@@ -8,7 +8,7 @@ impl Player {
 
         Self {
             side: side,
-            board: new_board
+            board: new_board,
         }
     }
 }

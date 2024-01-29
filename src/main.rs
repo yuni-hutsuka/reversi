@@ -4,8 +4,8 @@ mod attachment;
 mod logic;
 mod reversi;
 
-use std::env;
 use logic::logic;
+use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

@@ -1,15 +1,14 @@
 fn translate_board(before: &str) -> [[char; 8]; 8] {
-    let mut result: [[char; 8]; 8]
-        = [
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-            ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e']
-        ];
+    let mut result: [[char; 8]; 8] = [
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+    ];
 
     let nums = before.chars().collect::<Vec<char>>();
 

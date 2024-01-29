@@ -1,4 +1,5 @@
 use crate::attachment::attachment;
+use crate::reversi::board::point::Point;
 use crate::reversi::player::Player;
 
 pub fn logic(input: String) -> String {
@@ -10,10 +11,12 @@ pub fn logic(input: String) -> String {
     let player: Player = Player::new(data.1, data.0);
 
     // Player内のselectを実行し結果を受け取る
-    let result: (usize, usize) = player.random();
+    // let result: Point = player.random();
+    let result: Point = player.select();
 
     // 受け取ったデータをjsonへ変換
-    let json: String = "{x: ".to_owned() + &result.0.to_string() + ", y: " + &result.1.to_string() + " }";
+    let json: String =
+        "{x: ".to_owned() + &result.x.to_string() + ", y: " + &result.y.to_string() + " }";
 
     return json;
 }

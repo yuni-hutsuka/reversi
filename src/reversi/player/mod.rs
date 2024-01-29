@@ -1,5 +1,6 @@
 mod new;
 mod random;
+mod select;
 
 use crate::reversi::board::Board;
 
